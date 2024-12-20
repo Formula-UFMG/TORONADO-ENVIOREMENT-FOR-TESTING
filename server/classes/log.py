@@ -26,3 +26,32 @@ class Log:
         self.link = link
         self.descricao = descricao
         self.forca_g_lateral = forca_g_lateral
+
+    def modifica(self, vazao_de_bancada_a,wps,temperatura_oleo,pressao_embreagem,id_teste,tps,time,velo_rte,amortecedor_te,forca_g_long,amortecedor_de,tensao_bateria,velo_rtd,pressao_oleo,temperatura_ar,temperatura_motor,pressao_diferencial_combustivel,sonda_geral,pressao_freio,rpm,marcha,velo_rfe,id_logs,link,descricao,forca_g_lateral):
+        """Modifica todos os atributos do objeto."""
+        self.vazao_de_bancada_a = vazao_de_bancada_a
+        self.wps = wps
+        self.temperatura_oleo = temperatura_oleo
+        self.pressao_embreagem = pressao_embreagem
+        self.id_teste = id_teste
+        self.tps = tps
+        self.time = time
+        self.velo_rte = velo_rte
+        self.amortecedor_te = amortecedor_te
+        self.forca_g_long = forca_g_long
+        self.amortecedor_de = amortecedor_de
+        self.tensao_bateria = tensao_bateria
+        self.velo_rtd = velo_rtd
+        self.pressao_oleo = pressao_oleo
+        self.temperatura_ar = temperatura_ar
+        self.temperatura_motor = temperatura_motor
+        self.pressao_diferencial_combustivel = pressao_diferencial_combustivel
+        self.sonda_geral = sonda_geral
+        self.pressao_freio = pressao_freio
+        self.rpm = rpm
+        self.marcha = marcha
+        self.velo_rfe = velo_rfe
+        self.id_logs = id_logs
+        self.link = link
+        self.descricao = descricao
+        self.forca_g_lateral = forca_g_lateral
