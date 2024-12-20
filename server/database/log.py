@@ -36,3 +36,26 @@ def get_logs():
     else:
         return verificador, None
 
+def get_log(id_log):
+    comando = f"SELECT * FROM {TABLE} WHERE id_logs = '{id_log}'"  # comando SQL
+    verificador, cursor, con = connection.connect_to_db()  # Conexão com o banco
+    if verificador:
+        try:
+            cursor.execute(comando)  # Executa o comando
+            linhas = cursor.fetchall()
+            saida = []
+            for linha in linhas:
+                saida.append(log.Log(
+                    linha[0], linha[1], linha[2], linha[3], linha[4], linha[5], linha[6],
+                    linha[7], linha[8], linha[9], linha[10], linha[11], linha[12],
+                    linha[13], linha[14], linha[15], linha[16], linha[17], linha[18],
+                    linha[19], linha[20], linha[21], linha[22], linha[23], linha[24], linha[25]
+                ))
+            var_login = saida[0]
+        except Error as e:
+            verificador = False
+            send_email(e)
+        connection.close_connect_to_bd(cursor, con)  # Fecha a conexão
+        return verificador, var_login
+    else:
+        return verificador, None
