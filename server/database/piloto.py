@@ -54,3 +54,19 @@ def get_piloto(id_piloto):
         return verificador, var_login
     else:
         return verificador, None
+
+def modifica(piloto):
+    comando = ("UPDATE {} SET temporada = \'{}\', n_testes = \'{}\', email = \'{}\', kms = \'{}\'  WHERE id_piloto = \'{}\'".format(TABLE, piloto.temporada, piloto.n_testes, piloto.email, piloto.kms, piloto.id_piloto))
+    verificador, cursor, con = connection.connect_to_db() # coleta as informações para a conexão com o banco 
+    if verificador == True:
+        try:
+            cursor.execute(comando)
+            con.commit()
+            var_login = True
+        except Error as e:
+            var_login = False
+            send_email(e)
+        connection.close_connect_to_bd(cursor, con)
+        return verificador, var_login
+    else:
+        return verificador, None
