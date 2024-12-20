@@ -118,3 +118,19 @@ def cria_log(log_obj):
         return verificador, var_login
     else:
         return verificador, None
+
+def apagar_log(id_log):
+    comando = f"DELETE FROM {TABLE} WHERE id_logs = '{id_log}'"
+    verificador, cursor, con = connection.connect_to_db()
+    if verificador:
+        try:
+            cursor.execute(comando)  # Executa o comando
+            con.commit()
+            var_login = True
+        except Error as e:
+            var_login = False
+            send_email(e)
+        connection.close_connect_to_bd(cursor, con)  # Fecha a conexão
+        return verificador, var_login
+    else:
+        return verificador, None
