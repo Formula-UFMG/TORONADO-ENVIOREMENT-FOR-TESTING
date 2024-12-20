@@ -59,3 +59,34 @@ def get_log(id_log):
         return verificador, var_login
     else:
         return verificador, None
+
+def modifica(log_obj):
+    comando = f"""
+        UPDATE {TABLE} 
+        SET vazao_de_bancada_a = '{log_obj.vazao_de_bancada_a}', wps = '{log_obj.wps}', 
+            temperatura_oleo = '{log_obj.temperatura_oleo}', pressao_embreagem = '{log_obj.pressao_embreagem}', 
+            id_teste = '{log_obj.id_teste}', tps = '{log_obj.tps}', time = '{log_obj.time}', 
+            velo_rte = '{log_obj.velo_rte}', amortecedor_te = '{log_obj.amortecedor_te}', 
+            forca_g_long = '{log_obj.forca_g_long}', amortecedor_de = '{log_obj.amortecedor_de}', 
+            tensao_bateria = '{log_obj.tensao_bateria}', velo_rtd = '{log_obj.velo_rtd}', 
+            pressao_oleo = '{log_obj.pressao_oleo}', temperatura_ar = '{log_obj.temperatura_ar}', 
+            temperatura_motor = '{log_obj.temperatura_motor}', pressao_diferencial_combustivel = '{log_obj.pressao_diferencial_combustivel}', 
+            sonda_geral = '{log_obj.sonda_geral}', pressao_freio = '{log_obj.pressao_freio}', 
+            rpm = '{log_obj.rpm}', marcha = '{log_obj.marcha}', velo_rfe = '{log_obj.velo_rfe}', 
+            link = '{log_obj.link}', descricao = '{log_obj.descricao}', 
+            forca_g_lateral = '{log_obj.forca_g_lateral}' 
+        WHERE id_logs = '{log_obj.id_logs}'
+    """
+    verificador, cursor, con = connection.connect_to_db()  # Conexão com o banco
+    if verificador:
+        try:
+            cursor.execute(comando)  # Executa o comando
+            con.commit()
+            var_login = True
+        except Error as e:
+            var_login = False
+            send_email(e)
+        connection.close_connect_to_bd(cursor, con)  # Fecha a conexão
+        return verificador, var_login
+    else:
+        return verificador, None
