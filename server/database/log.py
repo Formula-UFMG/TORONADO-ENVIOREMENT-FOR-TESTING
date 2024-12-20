@@ -90,3 +90,31 @@ def modifica(log_obj):
         return verificador, var_login
     else:
         return verificador, None
+
+def cria_log(log_obj):
+    comando = f"""
+        INSERT INTO {TABLE} (vazao_de_bancada_a, wps, temperatura_oleo, pressao_embreagem, id_teste, tps, time, 
+        velo_rte, amortecedor_te, forca_g_long, amortecedor_de, tensao_bateria, velo_rtd, pressao_oleo, 
+        temperatura_ar, temperatura_motor, pressao_diferencial_combustivel, sonda_geral, pressao_freio, rpm, marcha, 
+        velo_rfe, id_logs, link, descricao, forca_g_lateral) 
+        VALUES ('{log_obj.vazao_de_bancada_a}', '{log_obj.wps}', '{log_obj.temperatura_oleo}', 
+        '{log_obj.pressao_embreagem}', '{log_obj.id_teste}', '{log_obj.tps}', '{log_obj.time}', 
+        '{log_obj.velo_rte}', '{log_obj.amortecedor_te}', '{log_obj.forca_g_long}', '{log_obj.amortecedor_de}', 
+        '{log_obj.tensao_bateria}', '{log_obj.velo_rtd}', '{log_obj.pressao_oleo}', '{log_obj.temperatura_ar}', 
+        '{log_obj.temperatura_motor}', '{log_obj.pressao_diferencial_combustivel}', '{log_obj.sonda_geral}', 
+        '{log_obj.pressao_freio}', '{log_obj.rpm}', '{log_obj.marcha}', '{log_obj.velo_rfe}', 
+        '{log_obj.id_logs}', '{log_obj.link}', '{log_obj.descricao}', '{log_obj.forca_g_lateral}')
+    """
+    verificador, cursor, con = connection.connect_to_db()
+    if verificador:
+        try:
+            cursor.execute(comando)  # Executa o comando
+            con.commit()
+            var_login = True
+        except Error as e:
+            var_login = False
+            send_email(e)
+        connection.close_connect_to_bd(cursor, con)  # Fecha a conexão
+        return verificador, var_login
+    else:
+        return verificador, None
