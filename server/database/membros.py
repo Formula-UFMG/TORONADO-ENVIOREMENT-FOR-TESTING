@@ -78,7 +78,10 @@ def get_membro(email):
         return verificador, None
 
 def modifica(membro):
-    comando = ("UPDATE {} SET nome = \'{}\', subgrupo = \'{}\', senha = \'{}\'  WHERE email = \'{}\'".format(TABLE, membro.nome, membro.subgrupo, membro.senha, membro.email))
+    if membro.senha != None:
+        comando = ("UPDATE {} SET nome = \'{}\', subgrupo = \'{}\', senha = \'{}\'  WHERE email = \'{}\'".format(TABLE, membro.nome, membro.subgrupo, membro.senha, membro.email))
+    else:
+        comando = ("UPDATE {} SET nome = \'{}\', subgrupo = \'{}\'  WHERE email = \'{}\'".format(TABLE, membro.nome, membro.subgrupo, membro.email))
     verificador, cursor, con = connection.connect_to_db() # coleta as informações para a conexão com o banco 
     if verificador == True:
         try:
