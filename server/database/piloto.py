@@ -9,7 +9,7 @@ from mysql.connector import Error
 from database import connection
 from error_reporter import send_email
 from server.classes import piloto
-TABLE = "TEFT.membro"
+TABLE = "TEFT.piloto"
 
 def get_pilotos():
     comando = ("SELECT * FROM {} ".format(TABLE)) # comando sql 
@@ -71,7 +71,7 @@ def modifica(piloto):
     else:
         return verificador, None
 
-def creat_membro(piloto):
+def creat_piloto(piloto):
     comando = """INSERT INTO {} (temporada, n_testes, email, kms) VALUE (\'{}\', \'{}\',\'{}\',\'{}\')""".format(TABLE, piloto.temporada, piloto.n_testes, piloto.email, piloto.kms)
     verificador, cursor, con = connection.connect_to_db()
     if verificador == True:
