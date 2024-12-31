@@ -12,3 +12,14 @@ def get_temporada():
         return str(data.year - 1) + "/" + str(data.year)
     elif data.month > 8:
         return str(data.year) + "/" + str(data.year + 1)
+
+def concatenar_vetor(vetor):
+    saida = ""
+    contador = 1
+    for elemento in vetor:
+        if contador == 1:
+            saida = str(elemento)
+        else:
+            saida += ";" + str(elemento)
+        contador += 1
+    return saida
