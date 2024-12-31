@@ -97,3 +97,22 @@ def apagar(prototipo):
         return verificador, var_login
     else:
         return verificador, None
+
+def max_id():
+    comando = """SELECT MAX(id_circuito) FROM \'{}\'""".format(TABLE)
+    verificador, cursor, con = connection.connect_to_db() # coleta as informações para a 
+    if verificador == True:
+        try:
+            # tenta executar o comando 
+            cursor.execute(comando) 
+            linhas = cursor.fetchall()
+            # verifica a informação
+            var_login = linhas
+        except Error as e: # 
+            verificador = False
+            send_email(e)
+        # finaliza a conexão com o banco 
+        connection.close_connect_to_bd(cursor,con)
+        return verificador, var_login
+    else:
+        return verificador, None
