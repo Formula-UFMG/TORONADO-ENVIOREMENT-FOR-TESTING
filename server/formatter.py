@@ -23,3 +23,9 @@ def concatenar_vetor(vetor):
             saida += ";" + str(elemento)
         contador += 1
     return saida
+
+def string_int(vetor):
+    saida = []
+    for elemento in vetor:
+        saida.append(int(elemento))
+    return saida
