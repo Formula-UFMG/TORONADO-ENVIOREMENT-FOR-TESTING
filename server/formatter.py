@@ -36,3 +36,11 @@ def string_float(vetor):
         saida.append(float(elemento))
     return saida
 
+def deserializacao(entrada,tipo):
+    entrada = str(entrada)
+    saida = entrada.split(";")
+    match tipo:
+        case "int":
+            return string_int(saida)
+        case _:
+            return string_float(saida)
