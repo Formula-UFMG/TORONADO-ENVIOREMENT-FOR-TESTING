@@ -1,5 +1,6 @@
 import hashlib
 from datetime import date
+import path_manager
 
 def encode_password(password):
     result = hashlib.md5()
@@ -44,3 +45,11 @@ def deserializacao(entrada,tipo):
             return string_int(saida)
         case _:
             return string_float(saida)
+
+def verificador_arquivos(testes):
+    saida = []
+    for teste in testes:
+        confirma = path_manager.file_exists(teste.documento)
+        if confirma == True:
+            saida.append(teste)
+    return saida
