@@ -29,3 +29,10 @@ def string_int(vetor):
     for elemento in vetor:
         saida.append(int(elemento))
     return saida
+
+def string_float(vetor):
+    saida = []
+    for elemento in vetor:
+        saida.append(float(elemento))
+    return saida
+
