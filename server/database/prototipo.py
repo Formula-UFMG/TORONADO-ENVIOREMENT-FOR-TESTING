@@ -62,7 +62,7 @@ def get_prototipo(id_prototipos):
             verificador = False
             send_email(e)
         connection.close_connect_to_bd(cursor, con)
-        return verificador, var_login
+        return verificador, var_login[0]
     else:
         return verificador, None
 

@@ -44,7 +44,7 @@ def get_membros():
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(membros.Membros(linha[1], None, linha[0], linha[2]))
+                saida.append(membros.Membros(linha[0],None,linha[2],linha[3]))
             var_login = saida
         except Error as e: # 
             verificador = False
@@ -66,7 +66,7 @@ def get_membro(email):
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(membros.Membros(linha[1], None, linha[0], linha[2]))
+                saida.append(membros.Membros(linha[0],None,linha[2],linha[3]))
             var_login = saida[0]
         except Error as e: # 
             verificador = False
