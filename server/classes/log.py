@@ -1,5 +1,5 @@
 class Log:
-    def __init__(self, vazao_de_bancada_a,wps,temperatura_oleo,pressao_embreagem,id_teste,tps,time,velo_rte,amortecedor_te,forca_g_long,amortecedor_de,tensao_bateria,velo_rtd,pressao_oleo,temperatura_ar,temperatura_motor,pressao_diferencial_combustivel,sonda_geral,pressao_freio,rpm,marcha,velo_rfe,id_logs,link,descricao,forca_g_lateral):
+    def __init__(self, vazao_de_bancada_a,wps,temperatura_oleo,pressao_embreagem,id_teste,tps,time,velo_rte,amortecedor_te,forca_g_long,amortecedor_de,tensao_bateria,velo_rtd,pressao_oleo,temperatura_ar,temperatura_motor,pressao_diferencial_combustivel,sonda_geral,pressao_freio,rpm,marcha,velo_rfe,id_logs,link,descricao,forca_g_lateral,id_piloto):
         self.vazao_de_bancada_a = vazao_de_bancada_a
         self.wps = wps
         self.temperatura_oleo = temperatura_oleo
@@ -26,8 +26,9 @@ class Log:
         self.link = link
         self.descricao = descricao
         self.forca_g_lateral = forca_g_lateral
+        self.id_piloto = id_piloto
 
-    def modifica(self, vazao_de_bancada_a,wps,temperatura_oleo,pressao_embreagem,id_teste,tps,time,velo_rte,amortecedor_te,forca_g_long,amortecedor_de,tensao_bateria,velo_rtd,pressao_oleo,temperatura_ar,temperatura_motor,pressao_diferencial_combustivel,sonda_geral,pressao_freio,rpm,marcha,velo_rfe,id_logs,link,descricao,forca_g_lateral):
+    def modifica(self, vazao_de_bancada_a,wps,temperatura_oleo,pressao_embreagem,id_teste,tps,time,velo_rte,amortecedor_te,forca_g_long,amortecedor_de,tensao_bateria,velo_rtd,pressao_oleo,temperatura_ar,temperatura_motor,pressao_diferencial_combustivel,sonda_geral,pressao_freio,rpm,marcha,velo_rfe,id_logs,link,descricao,forca_g_lateral,id_piloto):
         """Modifica todos os atributos do objeto."""
         self.vazao_de_bancada_a = vazao_de_bancada_a
         self.wps = wps
@@ -55,3 +56,4 @@ class Log:
         self.link = link
         self.descricao = descricao
         self.forca_g_lateral = forca_g_lateral
+        self.id_piloto = id_piloto

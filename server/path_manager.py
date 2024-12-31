@@ -11,3 +11,9 @@ def get_upload_path():
 
 def get_templates_path():
     return join_path(join_path(get_path(),"server"),"templates")
+
+def file_exists(path):
+    if path.exists():
+        return True
+    else:
+        return False
