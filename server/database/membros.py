@@ -34,7 +34,7 @@ def login(email, senha):
         return verificador, None
 
 def get_membros():
-    comando = ("SELECT * FROM {} ".format(TABLE)) # comando sql 
+    comando = ("SELECT * FROM {} ORDER BY nome ASC".format(TABLE)) # comando sql 
     verificador, cursor, con = connection.connect_to_db() # coleta as informações para a conexão com o banco 
     if verificador == True:
         try:
