@@ -33,7 +33,10 @@ def get_debriefing_path():
     return debriefing
 
 def get_templates_path():
-    return join_path(join_path(get_path(),"server"),"templates")
+    raiz_projeto = get_path()
+    server = join_path(raiz_projeto, "server")
+    templates = join_path(server, "templates")
+    return templates
 
 def file_exists(path):
     if path.exists():
