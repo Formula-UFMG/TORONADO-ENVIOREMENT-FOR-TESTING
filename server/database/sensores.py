@@ -26,3 +26,25 @@ def creat_sensores(sensor):
         return verificador, var_login
     else:
         return verificador, None
+
+def get_sensores():
+    comando = ("SELECT * FROM {} ORDER BY nome ASC".format(TABLE)) # comando sql 
+    verificador, cursor, con = connection.connect_to_db() # coleta as informações para a conexão com o banco 
+    if verificador == True:
+        try:
+            # tenta executar o comando 
+            cursor.execute(comando) 
+            linhas = cursor.fetchall()
+            # verifica a informação
+            saida = [] 
+            for linha in linhas:
+                saida.append(sensores.Sensores(linha[0], linha[1], linha[2], linha[3]))
+            var_login = saida
+        except Error as e: # 
+            verificador = False
+            send_email(e)
+        # finaliza a conexão com o banco 
+        connection.close_connect_to_bd(cursor,con)
+        return verificador, var_login
+    else:
+        return verificador, None
