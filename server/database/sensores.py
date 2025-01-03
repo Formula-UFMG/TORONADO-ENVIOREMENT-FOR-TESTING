@@ -38,7 +38,7 @@ def get_sensores():
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(sensores.Sensores(linha[0], linha[1], linha[2], linha[3]))
+                saida.append(sensores.Sensores(linha[0],linha[2],linha[1],linha[3]))
             var_login = saida
         except Error as e: # 
             verificador = False
@@ -60,14 +60,14 @@ def get_sensor(id_sensor):
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(sensores.Sensores(linha[0], linha[1], linha[2], linha[3]))
+                saida.append(sensores.Sensores(linha[0],linha[2],linha[1],linha[3]))
             var_login = saida
         except Error as e: # 
             verificador = False
             send_email(e)
         # finaliza a conexão com o banco 
         connection.close_connect_to_bd(cursor,con)
-        return verificador, var_login
+        return verificador, var_login[0]
     else:
         return verificador, None
 
