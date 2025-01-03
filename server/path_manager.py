@@ -22,6 +22,11 @@ def get_documentos_path():
     documentos = join_path(upload, "documentos")
     return documentos
 
+def get_briefing_path():
+    documentos = get_documentos_path()
+    briefing = join_path(documentos,"briefing")
+    return briefing
+
 def get_templates_path():
     return join_path(join_path(get_path(),"server"),"templates")
 
