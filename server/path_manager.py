@@ -27,6 +27,11 @@ def get_briefing_path():
     briefing = join_path(documentos,"briefing")
     return briefing
 
+def get_debriefing_path():
+    documentos = get_documentos_path()
+    debriefing = join_path(documentos, "debriefing")
+    return debriefing
+
 def get_templates_path():
     return join_path(join_path(get_path(),"server"),"templates")
 
