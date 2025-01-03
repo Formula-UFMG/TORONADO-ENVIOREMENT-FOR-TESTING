@@ -70,3 +70,19 @@ def get_sensor(id_sensor):
         return verificador, var_login
     else:
         return verificador, None
+
+def modificar(sensor):
+    comando = ("UPDATE {} SET nome = \'{}\', id_prototipo = \'{}\', informacao = \'{}\'  WHERE id_sensor = \'{}\'".format(TABLE, sensor.nome, sensor.id_prototipo, sensor.informacao, sensor.id_sensor))
+    verificador, cursor, con = connection.connect_to_db() # coleta as informações para a conexão com o banco 
+    if verificador == True:
+        try:
+            cursor.execute(comando)
+            con.commit()
+            var_login = True
+        except Error as e:
+            var_login = False
+            send_email(e)
+        connection.close_connect_to_bd(cursor, con)
+        return verificador, var_login
+    else:
+        return verificador, None
