@@ -2,6 +2,9 @@ import hashlib
 from datetime import date
 import path_manager
 
+from database import metodologia as bd_metodologia
+from server.classes import objetivos
+
 def encode_password(password):
     result = hashlib.md5()
     result.update(password.encode('utf-8'))
@@ -53,3 +56,20 @@ def verificador_arquivos(testes):
         if confirma == True:
             saida.append(teste)
     return saida
+
+def cria_objetivo(id):
+    verificador, metodologia = bd_metodologia.get_metodologia(id)
+    if verificador == True:
+        saida = objetivos.Objetivos(metodologia.id_metodologia,metodologia.objetivo,metodologia.status) 
+    else:
+        saida = None
+    return saida
+
+
+def get_objetivos(lista_testes):
+    for teste in lista_testes:
+        teste.id_objetivos = deserializacao(teste.id_objetivos, "int")
+        objetivos = []
+        for objetivo in teste.id_objetivos:
+            objetivos.append(cria_objetivo(objetivo))
+    return lista_testes
