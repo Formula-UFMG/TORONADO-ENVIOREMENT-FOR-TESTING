@@ -1,9 +1,16 @@
+import pytest
 from classes.membros import Membros
 
 def test_membro():
 
-    membro = Membros(email="teste@email.com", senha="12345", nome="João", subgrupo="Data")
+    membro = Membros(          #Cria o membro de acordo com a classe "Membros"
+        email="teste@email.com",
+        senha="12345", 
+        nome="João", 
+        subgrupo="Data"
+        )
 
+    #Verifica se foi criado com sucesso
     assert membro.email == "teste@email.com"
     assert membro.senha == "12345"
     assert membro.nome == "João"
@@ -11,8 +18,17 @@ def test_membro():
 
 def test_modifica_membro():
 
-    membro = Membros(email="teste@email.com", senha="12345", nome="João", subgrupo="Data")
-    membro.modifica(nome="Isadora", subgrupo="Eletrônica", senha="6789")
+    membro = Membros(
+        email="teste@email.com", 
+        senha="12345", 
+        nome="João", 
+        subgrupo="Data"
+        
+        )
+    membro.modifica(nome="Isadora", 
+                    subgrupo="Eletrônica", 
+                    senha="6789"
+                    )
 
     #Verifica se as alterações ocorreram com sucesso
     assert membro.nome == "Isadora"
@@ -21,8 +37,16 @@ def test_modifica_membro():
 
 def test_modifica_sem_senha(): #Teste sem modificar a senha
 
-    membro = Membros(email="teste@email.com", senha="12345", nome="João", subgrupo="Data")
-    membro.modifica(nome="José", subgrupo="Mecânica", senha=None)
+    membro = Membros(email="teste@email.com", 
+                     senha="12345", 
+                     nome="João", 
+                     subgrupo="Data"
+                     )
+    
+    membro.modifica(nome="José", 
+                    subgrupo="Mecânica", 
+                    senha=None
+                    )
 
     #Verifica se as alterações ocorreram com sucesso
     assert membro.nome == "José"

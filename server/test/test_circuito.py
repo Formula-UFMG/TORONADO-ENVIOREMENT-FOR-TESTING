@@ -1,8 +1,15 @@
+import pytest
 from classes.circuito import Circuito
 
 def test_criacao_circuito():
-    circuito = Circuito(id_circuito=1, nome="Autódromo", tempo_descolcamento=10, KM=100,
-                         curvas=12, cones=5, local="Contagem")
+    circuito = Circuito(id_circuito=1, 
+                        nome="Autódromo", 
+                        tempo_descolcamento=10, 
+                        KM=100,
+                        curvas=12, 
+                        cones=5, 
+                        local="Contagem"
+                        )
     
     #Confere se o as definições foram salvas corretamente
     assert circuito.id_circuito == 1
