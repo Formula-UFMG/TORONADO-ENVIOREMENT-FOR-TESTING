@@ -34,7 +34,7 @@ def login(email, senha):
         return verificador, None
 
 def get_membros():
-    comando = ("SELECT * FROM {} ".format(TABLE)) # comando sql 
+    comando = ("SELECT * FROM {} ORDER BY nome ASC".format(TABLE)) # comando sql 
     verificador, cursor, con = connection.connect_to_db() # coleta as informações para a conexão com o banco 
     if verificador == True:
         try:
@@ -44,7 +44,7 @@ def get_membros():
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(membros.Membros(linha[1], None, linha[0], linha[2]))
+                saida.append(membros.Membros(linha[0],None,linha[2],linha[3]))
             var_login = saida
         except Error as e: # 
             verificador = False
@@ -66,7 +66,7 @@ def get_membro(email):
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(membros.Membros(linha[1], None, linha[0], linha[2]))
+                saida.append(membros.Membros(linha[0],None,linha[2],linha[3]))
             var_login = saida[0]
         except Error as e: # 
             verificador = False
@@ -78,7 +78,10 @@ def get_membro(email):
         return verificador, None
 
 def modifica(membro):
-    comando = ("UPDATE {} SET nome = \'{}\', subgrupo = \'{}\', senha = \'{}\'  WHERE email = \'{}\'".format(TABLE, membro.nome, membro.subgrupo, membro.senha, membro.email))
+    if membro.senha != None:
+        comando = ("UPDATE {} SET nome = \'{}\', subgrupo = \'{}\', senha = \'{}\'  WHERE email = \'{}\'".format(TABLE, membro.nome, membro.subgrupo, membro.senha, membro.email))
+    else:
+        comando = ("UPDATE {} SET nome = \'{}\', subgrupo = \'{}\'  WHERE email = \'{}\'".format(TABLE, membro.nome, membro.subgrupo, membro.email))
     verificador, cursor, con = connection.connect_to_db() # coleta as informações para a conexão com o banco 
     if verificador == True:
         try:

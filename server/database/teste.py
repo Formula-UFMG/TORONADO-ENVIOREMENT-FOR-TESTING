@@ -34,8 +34,8 @@ def get_testes(id_prototipo):
     else:
         return verificador, None
 
-def get_teste(id_prototipo, N_teste):
-    comando = """SELECT * FROM {} WHERE = id_prototipo = \'{}\' AND N_teste = \'{}\'""".format(TABLE, id_prototipo, N_teste)
+def get_teste(N_teste):
+    comando = """SELECT * FROM {} WHERE N_teste = \'{}\'""".format(TABLE, N_teste)
     verificador, cursor, con = connection.connect_to_db() # coleta as informações para a 
     if verificador == True:
         try:
@@ -52,7 +52,7 @@ def get_teste(id_prototipo, N_teste):
             send_email(e)
         # finaliza a conexão com o banco 
         connection.close_connect_to_bd(cursor,con)
-        return verificador, var_login
+        return verificador, var_login[0]
     else:
         return verificador, None
 

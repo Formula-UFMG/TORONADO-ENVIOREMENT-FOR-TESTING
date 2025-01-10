@@ -13,7 +13,7 @@ from server.classes import metodologia
 TABLE = "TEFT.metodologia"
 
 def creat_metodologia(metodologia):
-    comando = """INSERT INTO {} (objetivo, N_pessoas, subgrupo, procedimento, N_voltas) VALUE(\'{}\',\'{}\',\'{}\',\'{}\',\'{}\')""".format(TABLE, metodologia.objetivo, metodologia.N_pessoas, metodologia.subgrupo, metodologia.procedimento, metodologia.N_voltas)
+    comando = """INSERT INTO {} (objetivo, N_pessoas, subgrupo, procedimento, N_voltas, temporada) VALUE(\'{}\',\'{}\',\'{}\',\'{}\',\'{}\',\'{}\')""".format(TABLE, metodologia.objetivo, metodologia.N_pessoas, metodologia.subgrupo, metodologia.procedimento, metodologia.N_voltas, metodologia.temporada)
     verificador, cursor, con = connection.connect_to_db()
     if verificador == True:
         try:
@@ -45,7 +45,7 @@ def apagar(metodologia):
         return verificador, None
 
 def modificar(metodologia):
-    comando = ("UPDATE {} SET objetivo = \'{}\', N_pessoas = \'{}\', subgrupo = \'{}\', procedimento = \'{}\', N_voltas = \'{}\'  WHERE id_metodologia = \'{}\'".format(TABLE,metodologia.objetivo, metodologia.N_pessoas, metodologia.subgrupo, metodologia.procedimento, metodologia.N_voltas, metodologia.id_metodologia))
+    comando = ("UPDATE {} SET objetivo = \'{}\', N_pessoas = \'{}\', subgrupo = \'{}\', procedimento = \'{}\', N_voltas = \'{}\',temporada = \'{}\' WHERE id_metodologia = \'{}\'".format(TABLE,metodologia.objetivo, metodologia.N_pessoas, metodologia.subgrupo, metodologia.procedimento, metodologia.N_voltas, metodologia.temporada, metodologia.id_metodologia))
     verificador, cursor, con = connection.connect_to_db() # coleta as informações para a conexão com o banco 
     if verificador == True:
         try:
@@ -71,7 +71,7 @@ def get_metodologias():
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(metodologia.Metodologia(linha[0], linha[1], linha[2], linha[3], linha[4], linha[5]))
+                saida.append(metodologia.Metodologia(linha[0], linha[1], linha[2], linha[3], linha[4], linha[5], linha[6]))
             var_login = saida
         except Error as e: # 
             verificador = False
@@ -93,13 +93,13 @@ def get_metodologia(id_metodologia):
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(metodologia.Metodologia(linha[0], linha[1], linha[2], linha[3], linha[4], linha[5]))
+                saida.append(metodologia.Metodologia(linha[0], linha[1], linha[2], linha[3], linha[4], linha[5], linha[6]))
             var_login = saida
         except Error as e: # 
             verificador = False
             send_email(e)
         # finaliza a conexão com o banco 
         connection.close_connect_to_bd(cursor,con)
-        return verificador, var_login
+        return verificador, var_login[0]
     else:
         return verificador, None
