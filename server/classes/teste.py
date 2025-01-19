@@ -15,3 +15,17 @@ class Teste:
             self.documento = "pre_teste" + str(self.N_teste) + ".pdf"
         else:
             self.documento = None
+
+    def modifica(self, pilotos=None, N_voltas=None, inicio=None, fim=None, almoco=None, n_testes=None) -> None:
+        if pilotos is not None:
+            self.pilotos = pilotos
+        if N_voltas is not None:
+            self.N_voltas = N_voltas
+        if inicio is not None:
+            self.inicio = inicio
+        if fim is not None:
+            self.fim = fim
+        if almoco is not None:
+            self.almoco = almoco
+        if n_testes is not None:
+            self.n_testes = n_testes

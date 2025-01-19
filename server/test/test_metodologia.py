@@ -9,7 +9,8 @@ def test_metodologia_criacao():
         N_pessoas=8,
         subgrupo="Motor",
         procedimento="Acelerar o carro nas retas",
-        N_voltas=5
+        N_voltas=5,
+        temporada = 2024
     )
 
     assert metodo.id_metodologia == 1
@@ -18,6 +19,7 @@ def test_metodologia_criacao():
     assert metodo.subgrupo == "Motor"
     assert metodo.procedimento == "Acelerar o carro nas retas"
     assert metodo.N_voltas == 5
+    assert metodo.temporada == 2024
 
 def test_metodologia_modificar():
     # Teste do método 'modificar'
@@ -27,7 +29,8 @@ def test_metodologia_modificar():
         N_pessoas=10,
         subgrupo="Aerodinâmica",
         procedimento="Testar o carro nas curvas",
-        N_voltas=3
+        N_voltas=3,
+        temporada=2025
     )
 
     metodo.modificar(
@@ -35,7 +38,7 @@ def test_metodologia_modificar():
         N_pessoas=12,
         subgrupo="Chassi",
         procedimento="Testar a temepratura do carro por longo periodos",
-        N_voltas=15
+        N_voltas=15,
     )
 
     assert metodo.objetivo == "Teste de temperatura"
@@ -43,3 +46,4 @@ def test_metodologia_modificar():
     assert metodo.subgrupo == "Chassi"
     assert metodo.procedimento == "Testar a temepratura do carro por longo periodos"
     assert metodo.N_voltas == 15
+    assert metodo.temporada == 2025
