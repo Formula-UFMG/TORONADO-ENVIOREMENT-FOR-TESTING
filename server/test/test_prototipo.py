@@ -9,7 +9,7 @@ def test_prototipo_criacao():
         ano_fabricacao=2023,
         status="Concluido",
         peso=1500,
-        temporada="2024",
+        temporada=2024,
         n_teste=5
     )
 
@@ -18,7 +18,7 @@ def test_prototipo_criacao():
     assert prototipo.ano_fabricacao == 2023
     assert prototipo.status == "Concluido"
     assert prototipo.peso == 1500
-    assert prototipo.temporada == "2024"
+    assert prototipo.temporada == 2024
     assert prototipo.n_teste == 5
 
 def test_prototipo_modificar():
@@ -29,7 +29,7 @@ def test_prototipo_modificar():
         ano_fabricacao=2024,
         status="Em desenvolvimento",
         peso=1500,
-        temporada="2024",
+        temporada=2024,
         n_teste=10
     )
 
@@ -38,7 +38,7 @@ def test_prototipo_modificar():
         ano_fabricacao=2024,
         status="Concluído",
         peso=1350,
-        temporada="2025",
+        temporada=2025,
         n_teste=15
     )
     
@@ -47,6 +47,6 @@ def test_prototipo_modificar():
     assert prototipo.ano_fabricacao == 2024
     assert prototipo.status == "Concluído"
     assert prototipo.peso == 1350
-    assert prototipo.temporada == "2025"
+    assert prototipo.temporada == 2025
     assert prototipo.n_teste == 15
     
