@@ -8,3 +8,11 @@ class Sensores:
     def modificar(self, nome, informacao):
         self.nome = nome
         self.informacao = informacao
+
+    def to_dict(self):
+        return {
+            "id_sensor": self.id_sensor,
+            "nome": self.nome,
+            "id_prototipo": self.id_prototipo,
+            "informacao": self.informacao
+        }
