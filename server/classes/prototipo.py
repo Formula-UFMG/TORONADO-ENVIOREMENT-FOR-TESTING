@@ -14,4 +14,16 @@ class Prototipo:
         self.status = status
         self.peso = peso
         self.temporada = temporada
-        self.n_teste = n_teste
+        if n_teste != None:
+            self.n_teste = n_teste
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome": self.nome,
+            "ano_fabricacao": self.ano_fabricacao,
+            "status": self.status,
+            "peso": self.peso,
+            "temporada": self.temporada,
+            "n_teste": self.n_teste
+        }
