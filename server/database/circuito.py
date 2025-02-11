@@ -13,7 +13,7 @@ from server.classes import circuito
 TABLE = "TEFT.circuito"
 
 def creat_circuito(circuito):
-    comando = """INSERT INTO {} (nome, tempo_descolcamento, KM, curvas, cones, local,data_criacao) VALUE(\'{}\',\'{}\',\'{}\',\'{}\',\'{}\',\'{}\',\'{}\')""".format(TABLE, circuito.nome, circuito.tempo_descolcamento, circuito.KM, circuito.curvas, circuito.cones, circuito.local, circuito.data_criacao)
+    comando = """INSERT INTO {} (nome, tempo_descolcamento, KM, curvas, cones, n_setores ,local,data_criacao) VALUE(\'{}\',\'{}\',\'{}\',\'{}\',\'{}\',\'{}\',\'{}\',\'{}\')""".format(TABLE, circuito.nome, circuito.tempo_descolcamento, circuito.KM, circuito.curvas, circuito.cones, circuito.n_setores, circuito.local, circuito.data_criacao)
     verificador, cursor, con = connection.connect_to_db()
     if verificador == True:
         try:
@@ -37,7 +37,7 @@ def get_circuitos():
             linhas = cursor.fetchall()
             saida = []
             for linha in linhas:
-                saida.append(circuito.Circuito(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7]))
+                saida.append(circuito.Circuito(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7],linha[8]))
             var_login = saida
         except Error as e:
             verificador = False
@@ -56,7 +56,7 @@ def get_circuito(id_circuito):
             linhas = cursor.fetchall()
             saida = []
             for linha in linhas:
-                saida.append(circuito.Circuito(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7]))
+                saida.append(circuito.Circuito(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7],linha[8]))
             var_login = saida
         except Error as e:
             verificador = False
@@ -67,7 +67,7 @@ def get_circuito(id_circuito):
         return verificador, None 
 
 def modificar(circuito):
-    comando = """UPDATE {} SET nome = \'{}\' ,tempo_descolcamento = \'{}\' ,KM = \'{}\' ,curvas = \'{}\' ,cones = \'{}\' ,local = \'{}\' WHERE ID_circuito = \'{}\'""".format(TABLE, circuito.nome, circuito.tempo_descolcamento, circuito.KM, circuito.curvas, circuito.cones, circuito.local, circuito.id_circuito)
+    comando = """UPDATE {} SET nome = \'{}\' ,tempo_descolcamento = \'{}\' ,KM = \'{}\' ,curvas = \'{}\' ,cones = \'{}\' ,local = \'{}\', n_setores = \'{}\' WHERE ID_circuito = \'{}\'""".format(TABLE, circuito.nome, circuito.tempo_descolcamento, circuito.KM, circuito.curvas, circuito.cones, circuito.local, circuito.n_setores, circuito.id_circuito)
     verificador, cursor, con = connection.connect_to_db()
     if verificador == True:
         try:
@@ -107,7 +107,7 @@ def get_id(data_criacao):
             linhas = cursor.fetchall()
             saida = []
             for linha in linhas:
-                saida.append(circuito.Circuito(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7]))
+                saida.append(circuito.Circuito(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7],linha[8]))
             var_login = saida
         except Error as e :
             verificador = False
