@@ -1,15 +1,24 @@
 class Pilotos:
     def __init__(self, id_piloto, temporada, n_testes, email, kms):
-        self.id_piloto = (id_piloto)
-        self.temporada = int(temporada)
-        self.n_testes = int(n_testes)
-        self.email = str(email)
-        self.kms = float(kms)
+        self.id_piloto = id_piloto
+        self.temporada = temporada
+        self.n_testes = n_testes
+        self.email = email
+        self.kms = kms
+    
+    def add_nome(self, nome):
+        self.nome = nome
 
-    def modifica(self, temporada=None, n_testes=None, kms=None) -> None:
-        if temporada is not None:
-            self.temporada = int(temporada)
-        if n_testes is not None:
-            self.n_testes = int(n_testes)
-        if kms is not None:
-            self.kms = float(kms)
+    def formato_saida(self, nome):
+        self.saida = str(self.id_piloto) + "|" + str(self.temporada)
+        self.nome = nome
+
+    def to_dict(self):
+        return {
+            "id_piloto": self.id_piloto,
+            "temporada": self.temporada,
+            "n_testes": self.n_testes,
+            "email": self.email,
+            "kms": self.kms,
+            "nome": self.nome,
+        }

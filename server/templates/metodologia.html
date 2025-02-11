@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodologias</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 300px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .card button {
+            margin: 5px;
+        }
+        .form-container {
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+    <script>
+        function handleForm(action, cardElement) {
+            // Mostrar o formulário correspondente
+            const formContainer = document.getElementById(`${action}-form-container`);
+            if (!formContainer) {
+                console.error(`Formulário ${action}-form-container não encontrado!`);
+                return;
+            }
+            formContainer.style.display = 'block';
+
+            // Preencher os campos do formulário (apenas para editar ou apagar)
+            if (action !== 'create' && cardElement) {
+                const idInput = formContainer.querySelector('input[name="id_metodologia"]');
+                const objetivoInput = formContainer.querySelector('input[name="objetivo"]');
+                const nPessoasInput = formContainer.querySelector('input[name="N_pessoas"]');
+                const subgrupoInput = formContainer.querySelector('input[name="subgrupo"]');
+                const procedimentoInput = formContainer.querySelector('input[name="procedimento"]');
+                const nVoltasInput = formContainer.querySelector('input[name="N_voltas"]');
+
+                idInput.value = cardElement.querySelector('p:nth-child(2)').textContent.split(': ')[1];
+                objetivoInput.value = cardElement.querySelector('h3').textContent;
+                nPessoasInput.value = cardElement.querySelector('p:nth-child(3)').textContent.split(': ')[1];
+                subgrupoInput.value = cardElement.querySelector('p:nth-child(4)').textContent.split(': ')[1];
+                procedimentoInput.value = cardElement.querySelector('p:nth-child(5)').textContent.split(': ')[1];
+                nVoltasInput.value = cardElement.querySelector('p:nth-child(6)').textContent.split(': ')[1];
+            }
+        }
+
+        function enviarRequisicao(botao) {
+            const id = botao.getAttribute("data-id");
+
+            fetch('/metodologia/prototipo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Verifica se a resposta é uma lista
+                if (Array.isArray(data)) {
+                    const container = document.getElementById("cards-container"); // Container onde os cards serão inseridos
+                    if (!container) {
+                        console.error("Elemento #cards-container não encontrado!");
+                        return;
+                    }
+                    container.innerHTML = ""; // Limpa o conteúdo anterior
+
+                    // Itera sobre cada item da lista e cria um card
+                    data.forEach(metodologia => {
+                        const card = document.createElement("div");
+                        card.classList.add("card");
+
+                        // Preenche o card com os dados da metodologia
+                        card.innerHTML = `
+                            <h3>${metodologia.objetivo}</h3>
+                            <p><strong>ID:</strong> ${metodologia.id_metodologia}</p>
+                            <p><strong>Número de Pessoas:</strong> ${metodologia.N_pessoas}</p>
+                            <p><strong>Subgrupo:</strong> ${metodologia.subgrupo}</p>
+                            <p><strong>Procedimento:</strong> ${metodologia.procedimento}</p>
+                            <p><strong>Número de Voltas:</strong> ${metodologia.N_voltas}</p>
+                            <p><strong>Status:</strong> ${metodologia.status}</p>
+                            <button onclick="handleForm('delete', this.parentElement)">Apagar</button>
+                            <button onclick="handleForm('edit', this.parentElement)">Editar</button>
+                        `;
+
+                        // Adiciona o card ao container
+                        container.appendChild(card);
+                    });
+                } else {
+                    console.error("A resposta não é uma lista:", data);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Lista de Metodologias</h1>
+
+    <!-- Botão para criar nova metodologia -->
+    <button onclick="handleForm('create')">Criar Nova Metodologia</button>
+
+    <div class="card-container">
+        {% for prototipo in prototipos %}
+            <button data-id="{{prototipo.id}}" onclick="enviarRequisicao(this)">{{prototipo.nome}}</button>
+        {% endfor %}
+    </div>
+
+    <!-- Adicionando a div que estava faltando -->
+    <div id="cards-container" class="card-container"></div>
+
+    <!-- Formulário para apagar -->
+    <div id="delete-form-container" class="form-container">
+        <h2>Apagar Metodologia</h2>
+        <form method="POST" action="apaga_metodologia">
+            <label>ID:</label>
+            <input type="text" name="id_metodologia" readonly><br>
+            <label>Objetivo:</label>
+            <input type="text" name="objetivo" readonly><br>
+            <label>Número de Pessoas:</label>
+            <input type="text" name="N_pessoas" readonly><br>
+            <label>Subgrupo:</label>
+            <input type="text" name="subgrupo" readonly><br>
+            <label>Procedimento:</label>
+            <input type="text" name="procedimento" readonly><br>
+            <label>Número de Voltas:</label>
+            <input type="text" name="N_voltas" readonly><br>
+            <button type="submit">Confirmar Apagar</button>
+        </form>
+    </div>
+
+    <!-- Formulário para editar -->
+    <div id="edit-form-container" class="form-container">
+        <h2>Editar Metodologia</h2>
+        <form method="POST" action="modifica_metodologia">
+            <label>ID:</label>
+            <input type="text" name="id_metodologia" readonly><br>
+            <label>Objetivo:</label>
+            <input type="text" name="objetivo"><br>
+            <label>Número de Pessoas:</label>
+            <input type="text" name="N_pessoas"><br>
+            <label>Subgrupo:</label>
+            <input type="text" name="subgrupo"><br>
+            <label>Procedimento:</label>
+            <input type="text" name="procedimento"><br>
+            <label>Número de Voltas:</label>
+            <input type="text" name="N_voltas"><br>
+            <button type="submit">Salvar Alterações</button>
+        </form>
+    </div>
+
+    <!-- Formulário para criar nova metodologia -->
+    <div id="create-form-container" class="form-container">
+        <h2>Criar Nova Metodologia</h2>
+        <form method="POST" action="cria_metodologia">
+            <label>Objetivo:</label>
+            <input type="text" name="objetivo"><br>
+            <label>Número de Pessoas:</label>
+            <input type="text" name="N_pessoas"><br>
+            <label>Subgrupo:</label>
+            <input type="text" name="subgrupo"><br>
+            <label>Procedimento:</label>
+            <input type="text" name="procedimento"><br>
+            <label>Número de Voltas:</label>
+            <input type="text" name="N_voltas"><br>
+            <label for="temporada">Temporada:</label>
+            <input type="text" id="temporada" name="temporada"><br>
+            <button type="submit">Criar Metodologia</button>
+        </form>
+    </div>
+</body>
+</html>

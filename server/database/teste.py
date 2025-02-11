@@ -10,10 +10,10 @@ from database import connection
 from error_reporter import send_email
 from server.classes import teste
 
-TABLE = "TEFT.teste"
+TABLE = "TEFT.testes"
 
-def get_testes(id_prototipo):
-    comando = """SELECT * FROM {} WHERE = id_prototipo = \'{}\'""".format(TABLE, id_prototipo)
+def get_testes():
+    comando = """SELECT * FROM {} """.format(TABLE)
     verificador, cursor, con = connection.connect_to_db() # coleta as informações para a 
     if verificador == True:
         try:
@@ -23,7 +23,7 @@ def get_testes(id_prototipo):
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(teste.Teste(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7],linha[8],linha[9]))
+                saida.append(teste.Teste(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7],linha[8],linha[9],linha[11],linha[12]))
             var_login = saida
         except Error as e: # 
             verificador = False
@@ -45,7 +45,7 @@ def get_teste(N_teste):
             # verifica a informação
             saida = [] 
             for linha in linhas:
-                saida.append(teste.Teste(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7],linha[8],linha[9]))
+                saida.append(teste.Teste(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7],linha[8],linha[9],linha[11],linha[12]))
             var_login = saida
         except Error as e: # 
             verificador = False
@@ -56,8 +56,30 @@ def get_teste(N_teste):
     else:
         return verificador, None
 
+def get_teste_prototipo(id_prototipo):
+    comando = """SELECT * FROM {} WHERE id_prototipo = \'{}\'""".format(TABLE, id_prototipo)
+    verificador, cursor, con = connection.connect_to_db() # coleta as informações para a 
+    if verificador == True:
+        try:
+            # tenta executar o comando 
+            cursor.execute(comando) 
+            linhas = cursor.fetchall()
+            # verifica a informação
+            saida = [] 
+            for linha in linhas:
+                saida.append(teste.Teste(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6],linha[7],linha[8],linha[9],linha[11],linha[12]))
+            var_login = saida
+        except Error as e: # 
+            verificador = False
+            send_email(e)
+        # finaliza a conexão com o banco 
+        connection.close_connect_to_bd(cursor,con)
+        return verificador, var_login
+    else:
+        return verificador, None
+
 def creat_teste(teste):
-    comando = """INSERT INTO {} (pilotos, id_objetivos, N_voltas, inicio, fim, almoco, data, id_prototipo, id_circuito) VALUE( \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\')""".format(TABLE, teste.pilotos, teste.id_objetivos, teste.N_voltas, teste.inicio, teste.fim, teste.almoco, teste.data, teste.id_prototipo, teste.id_circuito)
+    comando = """INSERT INTO {} (nome, pilotos, id_objetivos, N_voltas, inicio, fim, almoco, data, id_prototipo, id_circuito, status, n_testes) VALUE(\'{}\',\'{}\', \'{}\', \'{}\', \'{}\', \'{}\', {}, \'{}\', \'{}\', \'{}\', \'{}\',0)""".format(TABLE, teste.nome ,teste.pilotos, teste.id_objetivos, teste.N_voltas, teste.inicio, teste.fim, teste.almoco, teste.data, teste.id_prototipo, teste.id_circuito, teste.status)
     verificador, cursor, con = connection.connect_to_db()
     if verificador == True:
         try:
@@ -103,3 +125,6 @@ def modificar(teste):
         return verificador, var_login
     else:
         return verificador, None
+
+def get_max_teste():
+    pass

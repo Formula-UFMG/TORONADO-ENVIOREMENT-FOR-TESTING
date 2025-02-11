@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototipo</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 8px;
+        }
+        th, td {
+            padding: 8px;
+        }
+
+        form {
+            margin-bottom: 20px;
+            border: 1px solid black;
+            padding: 20px;
+            width: 300px;
+            display: inline-block;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prototipos</h1>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>nome</th>
+                <th>ano_fabricacao</th>
+                <th>status</th>
+                <th>peso</th>
+                <th>temporada</th>
+                {% if subgrupo == True %}
+                    <th>editar</th>
+                    <th>apagar</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for prototipo in prototipos %}
+                <tr>
+                    <td>{{prototipo.id}}</td>
+                    <td>{{prototipo.nome}}</td>
+                    <td>{{prototipo.ano_fabricacao}}</td>
+                    <td>{{prototipo.status}}</td>
+                    <td>{{prototipo.peso}}</td>
+                    <td>{{prototipo.temporada}}</td>
+                    {% if subgrupo == True %}
+                        <td><button onclick="editar_forme(this)">editar</button></td>
+                        <td><button onclick="apagar_forme(this)">apagar</button></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form action="modifica_prototipo" method="post" id="forme_edicao">
+        <h2>Formulario de Edição</h2>
+        <label for="id_edicao">id</label>
+        <input type="text" id="id_edicao" name="id_edicao" readonly>
+
+        <label for="nome_edicao">nome</label>
+        <input type="text" id="nome_edicao" name="nome_edicao">
+
+        <label for="ano_fabricacao_edicao">ano_fabricacao</label>
+        <input type="text" id="ano_fabricacao_edicao" name="ano_fabricacao_edicao">
+
+        <label for="status_edicao">status</label>
+        <input type="text" id="status_edicao" name="status_edicao">
+
+        <label for="peso_edicao">peso</label>
+        <input type="text" id="peso_edicao" name="peso_edicao">
+
+        <label for="temporada_edicao">temporada</label>
+        <input type="text" id="temporada_edicao" name="temporada_edicao">
+        
+        <button type="submit">Editar</button>
+    </form>
+    
+    <form action="apagar_prototipo" method="post" id="forme_apagar">
+        <h2>Formulario para Apagar</h2>
+        <label for="id_apagar">id</label>
+        <input type="text" id="id_apagar" name="id_apagar" readonly>
+
+        <label for="nome_apagar">nome</label>
+        <input type="text" id="nome_apagar" name="nome_apagar" readonly>
+
+        <label for="ano_fabricacao_apagar">ano_fabricacao</label>
+        <input type="text" id="ano_fabricacao_apagar" name="ano_fabricacao_apagar" readonly>
+
+        <label for="status_apagar">status</label>
+        <input type="text" id="status_apagar" name="status_apagar" readonly>
+
+        <label for="peso_apagar">peso</label>
+        <input type="text" id="peso_apagar" name="peso_apagar" readonly>
+
+        <label for="temporada_apagar">temporada</label>
+        <input type="text" id="temporada_apagar" name="temporada_apagar" readonly>
+        
+        <button type="submit">Apagar</button>
+    </form>
+
+    <form action="criar_prototipo" method="post">
+        <h2>Criar Prototipo</h2>
+
+        <label for="nome">nome</label>
+        <input type="text" id="nome" name="nome">
+
+        <label for="ano_fabricacao">ano_fabricacao</label>
+        <input type="text" id="ano_fabricacao" name="ano_fabricacao">
+
+        <label for="status">status</label>
+        <input type="text" id="status" name="status">
+
+        <label for="peso">peso</label>
+        <input type="text" id="peso" name="peso">
+
+        <label for="temporada">temporada</label>
+        <input type="text" id="temporada" name="temporada">
+        
+        <button type="submit">Criar</button>
+    </form>
+
+    <script>
+        function editar_forme(button){
+            const row = button.parentElement.parentElement;
+            const id = row.cells[0].textContent;
+            const nome = row.cells[1].textContent;
+            const ano_fabricacao = row.cells[2].textContent;
+            const status = row.cells[3].textContent;
+            const peso = row.cells[4].textContent;
+            const temporada = row.cells[5].textContent;
+
+            document.getElementById("id_edicao").value = id;
+            document.getElementById("nome_edicao").value = nome;
+            document.getElementById("ano_fabricacao_edicao").value = ano_fabricacao;
+            document.getElementById("status_edicao").value = status;
+            document.getElementById("peso_edicao").value = peso;
+            document.getElementById("temporada_edicao").value = temporada;
+        }
+
+        function apagar_forme(button){
+            const row = button.parentElement.parentElement;
+            const id = row.cells[0].textContent;
+            const nome = row.cells[1].textContent;
+            const ano_fabricacao = row.cells[2].textContent;
+            const status = row.cells[3].textContent;
+            const peso = row.cells[4].textContent;
+            const temporada = row.cells[5].textContent;
+
+            document.getElementById("id_apagar").value = id;
+            document.getElementById("nome_apagar").value = nome;
+            document.getElementById("ano_fabricacao_apagar").value = ano_fabricacao;
+            document.getElementById("status_apagar").value = status;
+            document.getElementById("peso_apagar").value = peso;
+            document.getElementById("temporada_apagar").value = temporada;
+        }
+    </script>
+</body>
+</html>

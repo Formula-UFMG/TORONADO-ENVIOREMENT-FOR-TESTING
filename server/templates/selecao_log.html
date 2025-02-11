@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vários Grupos de Seleção Dinâmicos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h1>Selecione uma opção</h1>
+
+    <form id="dynamic-form" method="POST" action="trpm_coleta">
+        <div id="blocks-container">
+            <div class="select-block" id="block1">
+                <label for="block_name_1">Nome do Bloco 1:</label>
+                <input type="text" id="block_name_1" name="block_name_1">
+                <br><br>
+                
+                <label for="select1_1">Escolha o prototipo (Bloco 1):</label>
+                <select class="select1" data-block="1" id="select1_1" name="select1_1">
+                    <option value="">Selecione o prototipo</option>
+                    {% for prototipo in prototipos %}
+                        <option value="{{prototipo.id}}">{{prototipo.nome}}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                
+                <label for="select2_1">Escolha o numero do teste (Bloco 1):</label>
+                <select class="select2" data-block="1" id="select2_1" name="select2_1">
+                    <option value="">Selecione o teste</option>
+                </select>
+                <br><br>
+
+                <label for="select3_1">Escolha o piloto (Bloco 1):</label>
+                <select class="select3" data-block="1" id="select3_1" name="select3_1">
+                    <option value="">Selecione o piloto</option>
+                </select>
+                <br><br>
+
+                <label for="select4_1">Escolha o log (Bloco 1):</label>
+                <select class="select4" data-block="1" id="select4_1" name="select4_1">
+                    <option value="">Selecione o log</option>
+                </select>
+                <br><br>
+
+                <label for="descricao_1">Descrição:</label>
+                <input type="text" id="descricao_1" name="descricao_1" readonly>
+                <br><br>
+
+                <button type="button" class="remove-block" data-block="1">Remover Bloco</button>
+            </div>
+        </div>
+
+        <button type="button" id="add-block">Adicionar Bloco</button>
+        <br><br>
+        
+        <!-- Input para armazenar a quantidade de blocos -->
+        <label for="quantidade_blocos">Quantidade de Blocos:</label>
+        <input type="number" id="quantidade_blocos" name="quantidade_blocos" readonly>
+        <br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script>
+        function updateLabels() {
+            $('.select-block').each(function(index) {
+                var newId = index + 1;
+                $(this).attr('id', 'block' + newId);
+                $(this).find('label, select, input').each(function() {
+                    var labelFor = $(this).attr('for');
+                    if (labelFor) {
+                        $(this).attr('for', labelFor.replace(/\d+$/, newId));
+                    }
+                    var id = $(this).attr('id');
+                    if (id) {
+                        $(this).attr('id', id.replace(/\d+$/, newId));
+                    }
+                    var name = $(this).attr('name');
+                    if (name) {
+                        $(this).attr('name', name.replace(/\d+$/, newId));
+                    }
+                    if ($(this).is('label')) {
+                        var labelText = $(this).text().replace(/Bloco \d+/, 'Bloco ' + newId);
+                        $(this).text(labelText);
+                    }
+                });
+                $(this).find('.remove-block').attr('data-block', newId);
+            });
+        }
+
+        function updateQuantidadeBlocos() {
+            var quantidade = $('.select-block').length;
+            $('#quantidade_blocos').val(quantidade);
+        }
+
+        $('#add-block').click(function() {
+            var blockId = $('.select-block').length + 1;
+            var newBlock = $('#block1').clone().prop('id', 'block' + blockId);
+            newBlock.find('input, select').each(function() {
+                var newId = $(this).attr('id').replace(/\d+$/, blockId);
+                $(this).attr('id', newId).attr('name', newId).val('');
+                $(this).data('block', blockId);
+            });
+            newBlock.find('label').each(function() {
+                var newFor = $(this).attr('for').replace(/\d+$/, blockId);
+                $(this).attr('for', newFor);
+                $(this).text($(this).text().replace(/Bloco \d+/, 'Bloco ' + blockId));
+            });
+            newBlock.find('.remove-block').attr('data-block', blockId);
+            newBlock.appendTo('#blocks-container');
+            updateQuantidadeBlocos();
+        });
+
+        $(document).on('click', '.remove-block', function() {
+            if ($('.select-block').length > 1) {
+                $(this).closest('.select-block').remove();
+                updateLabels();
+                updateQuantidadeBlocos();
+            } else {
+                alert('Pelo menos um bloco deve permanecer na página!');
+            }
+        });
+
+        $(document).on('change', '.select1', function() {
+            var blockId = $(this).data('block');
+            var selectedOption = $(this).val();
+            $.get('/get_teste/' + selectedOption, function(data) {
+                var nextSelect = $('#select2_' + blockId);
+                nextSelect.empty().append('<option value="">Selecione o teste</option>');
+                data.forEach(function(item) {
+                    nextSelect.append('<option value="' + item.N_teste + '">' + item.N_teste + '</option>');
+                });
+            });
+        });
+
+        $(document).on('change', '.select2', function() {
+            var blockId = $(this).data('block');
+            var selectedOption = $(this).val();
+            $.get('/get_piloto/' + selectedOption, function(data) {
+                var nextSelect = $('#select3_' + blockId);
+                nextSelect.empty().append('<option value="">Selecione o piloto</option>');
+                data.forEach(function(item) {
+                    nextSelect.append('<option value="' + item.id + '">' + item.nome + '</option>');
+                });
+            });
+        });
+
+        $(document).on('change', '.select3', function() {
+            var blockId = $(this).data('block');
+            var selectedOption = $(this).val();
+            var selectedTesteId = $('#select2_' + blockId).val(); // Captura o ID do teste
+            $.get('/get_logs/' + selectedOption + '?teste_id=' + selectedTesteId, function(data) {
+                var nextSelect = $('#select4_' + blockId);
+                nextSelect.empty().append('<option value="">Selecione o log</option>');
+                data.forEach(function(item) {
+                    nextSelect.append('<option value="' + item.id + '">' + item.nome + '</option>');
+                });
+            });
+        });
+
+        $(document).on('change', '.select4', function() {
+            var blockId = $(this).data('block');
+            var selectedOption = $(this).val();
+            $.get('/get_descricao/' + selectedOption, function(data) {
+                $('#descricao_' + blockId).val(data.descricao);
+            });
+        });
+
+        // Inicializa o valor da quantidade de blocos ao carregar a página
+        $(document).ready(function() {
+            updateQuantidadeBlocos();
+        });
+    </script>
+</body>
+</html>

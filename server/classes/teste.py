@@ -1,48 +1,44 @@
+import sys
+import os
+from datetime import timedelta
+
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(root_path)
+
+from path_manager import get_briefing_path, get_debriefing_path
+
 class Teste:
-    def __init__(self, N_teste, pilotos, id_objetivos, N_voltas, inicio, fim, almoco, data, id_prototipo, id_circuito, n_testes):
-        self.N_teste = self.N_teste = int(N_teste) if N_teste is not None else None
+    def __init__(self, N_teste, nome, pilotos, id_objetivos, N_voltas, inicio, fim, almoco, data, id_prototipo, id_circuito, status, observacao):
+        self.N_teste = N_teste
+        self.nome = nome
         self.pilotos = pilotos
         self.id_objetivos = id_objetivos
-        self.N_voltas = int(N_voltas)
+        self.N_voltas = N_voltas
         self.inicio = inicio
         self.fim = fim
-        self.almoco = str(almoco)
+        self.almoco = almoco
         self.data = data
-        self.id_prototipo = int(id_prototipo)
-        self.id_circuito = int(id_circuito)
-        self.n_testes = int(n_testes)
-        if self.N_teste != None:
-            self.documento = "pre_teste" + str(self.N_teste) + ".pdf"
+        self.id_prototipo = id_prototipo
+        self.id_circuito = id_circuito
+        self.status = status
+        self.observacao = observacao
+        if self.N_teste is not None:
+            self.briefing = get_briefing_path() + "briefing" + str(self.N_teste) + ".pdf"
+            self.debriefing = get_debriefing_path() + "debriefing" + str(self.N_teste) + ".pdf"
         else:
-            self.documento = None
+            self.briefing = None
+            self.debriefing = None
 
-    def modifica(self, pilotos=None, N_voltas=None, inicio=None, fim=None, almoco=None, n_testes=None) -> None:
-        if pilotos is not None:
-            self.pilotos = pilotos
-        if N_voltas is not None:
-            self.N_voltas = N_voltas
-        if inicio is not None:
-            self.inicio = inicio
-        if fim is not None:
-            self.fim = fim
-        if almoco is not None:
-            self.almoco = almoco
-        if n_testes is not None:
-            self.n_testes = n_testes
+    def serialize_timedelta(self, value):
+        if isinstance(value, timedelta):
+            # Retorna o número de segundos do timedelta
+            return value.total_seconds()
+        return value
 
     def to_dict(self):
-        #Converte para um dicionário
+        # Retorna os atributos da instância como um dicionário
         return {
-            "N_teste": self.N_teste,
-            "pilotos": self.pilotos,
-            "id_objetivos": self.id_objetivos,
-            "N_voltas": self.N_voltas,
-            "inicio": self.inicio,
-            "fim": self.fim,
-            "almoco": self.almoco,
-            "data": self.data,
-            "id_prototipo": self.id_prototipo,
-            "id_circuito": self.id_circuito,
-            "n_testes": self.n_testes,
-            "documento": self.documento,
+            'N_teste': self.N_teste,
+            'pilotos': self.pilotos,
+            'id_prototipo': self.id_prototipo,
         }

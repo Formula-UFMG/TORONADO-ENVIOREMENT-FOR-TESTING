@@ -38,3 +38,6 @@ def incorrect_access(email):
     emails = ["dataanalysisformulaufmg2024@gmail.com","italonunespereiravieira@gmail.com","italonunca04@gmail.com"]
     for email in emails:
         send_email(email,"acesso incorreto","{} no dia e hora: {}".format(email,datetime.now()))
+
+def erro_imagem(caminho): # envia um emal falando que n foi possivel apagar uma imagem e manda o caminho da imagem 
+    pass

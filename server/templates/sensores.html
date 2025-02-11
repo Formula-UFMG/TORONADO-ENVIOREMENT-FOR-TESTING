@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Sensores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e3e3e3;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header, footer {
+            width: 100%;
+            background: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.2em;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 20px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            transition: transform 0.3s;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        form input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>Gerenciamento de Sensores</header>
+
+    <div class="container">
+        <h2>Selecionar Protótipo</h2>
+        <div class="card-container">
+            {% for prototipo in prototipos %}
+                <button data-id="{{ prototipo.id }}" onclick="enviarRequisicao(this)">{{ prototipo.nome }}</button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container" id="cards-container"></div>
+
+    <div class="container">
+        <h2>Gerenciar Sensores</h2>
+        <form action="cria_sensor" method="post">
+            <h3>Criar Sensor</h3>
+            <input type="text" name="id_prototipo" placeholder="ID do Protótipo">
+            <input type="text" name="nome" placeholder="Nome">
+            <input type="text" name="informacao" placeholder="Informação">
+            <button>Criar</button>
+        </form>
+
+        <form action="modifica_sensores" method="post">
+            <h3>Editar Sensor</h3>
+            <input type="text" name="id_editar" id="id_editar" placeholder="ID">
+            <input type="text" name="nome_editar" id="nome_editar" placeholder="Nome">
+            <input type="text" name="informacao_editar" id="informacao_editar" placeholder="Informação">
+            <button>Modificar</button>
+        </form>
+
+        <form action="apagar_sensores" method="post">
+            <h3>Apagar Sensor</h3>
+            <input type="text" name="id_apagar" id="id_apagar" placeholder="ID">
+            <input type="text" name="nome_apagar" id="nome_apagar" placeholder="Nome">
+            <input type="text" name="informacao_apagar" id="informacao_apagar" placeholder="Informação">
+            <button>Apagar</button>
+        </form>
+    </div>
+
+    <script>
+        function enviarRequisicao(botao) {
+            const id = botao.getAttribute("data-id");
+
+            fetch('/sensores/prototipo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_prototipo: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById("cards-container");
+                container.innerHTML = "";
+
+                data.forEach(sensor => {
+                    const card = document.createElement("div");
+                    card.classList.add("card");
+                    card.innerHTML = `
+                        <img src="../static/upload/imagens/sensores.jpg" alt="Sensor">
+                        <h2>${sensor.nome}</h2>
+                        <p>ID: ${sensor.id_sensor}</p>
+                        <p>Informação: ${sensor.informacao}</p>
+                        <button onclick="sendToForm_editar(this)">Editar</button>
+                        <button onclick="sendToForm_apagar(this)">Apagar</button>
+                    `;
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+
+        function sendToForm_editar(button) {
+            const row = button.parentElement;
+            document.getElementById('id_editar').value = row.querySelector('p').textContent.split(': ')[1];
+            document.getElementById('nome_editar').value = row.querySelector('h2').textContent;
+            document.getElementById('informacao_editar').value = row.querySelectorAll('p')[1].textContent.split(': ')[1];
+        }
+
+        function sendToForm_apagar(button) {
+            const row = button.parentElement;
+            document.getElementById('id_apagar').value = row.querySelector('p').textContent.split(': ')[1];
+            document.getElementById('nome_apagar').value = row.querySelector('h2').textContent;
+            document.getElementById('informacao_apagar').value = row.querySelectorAll('p')[1].textContent.split(': ')[1];
+        }
+    </script>
+</body>
+</html>

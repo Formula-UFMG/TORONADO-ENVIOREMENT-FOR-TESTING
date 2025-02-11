@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>tela de inicio</h1>
+    {% set mensagens = get_flashed_messages() %}
+    {% if mensagens %}
+        <div class="erro">
+            {% for msg in mensagens %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <a href="/sair"><button>sair</button></a>
+    <a href="/membros"><button>membros</button></a>
+    <a href="/prototipos"><button>prototipos</button></a>
+    <a href="/circuito"><button>circuitos</button></a>
+    <a href="/metodologia"><button>metodologia</button></a>
+    <a href="/teste"><button>teste</button></a>
+    <a href="/sensores"><button>Sensores</button></a>
+    <a href="/pilotos"> <button>pilotos</button></a>
+    <a href="/documentos"><button>documentos</button></a>
+    <a href="/trpm_selecao"><button>log</button></a>
+    {% if subgrupo == True %}
+        <a href="/modifica_creds"><button>credenciais</button></a>
+    {% endif %}
+</body>
+</html>

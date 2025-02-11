@@ -1,21 +1,7 @@
-# Ambiente virtual
-env/
-venv/
 
-# Arquivos compilados do Python
-__pycache__/
+server/__pycache__/TRMP.cpython-312.pyc
 *.pyc
-*.pyo
-
-# Logs e arquivos temporários
-*.log
-*.tmp
-
-# Configurações do VS Code
-.vscode/
-
-# Cache do Pytest
-*.pytest_cache/
-
-# Pacotes instalados (site-packages)
-env/Lib/site-packages/
+/server/TEFT/Lib/site-packages
+/server/TEFT/Scripts
+/server/database/__pycache__
+/server/database/__pycache__

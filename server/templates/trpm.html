@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vários Formulários AJAX</title>
+</head>
+<body>
+    <h1>Formulários</h1>
+
+    <form class="myForm">
+        <label for="name1">Nome:</label>
+        <input type="text" id="name1" name="name" required>
+        <br><br>
+        <label for="age1">Idade:</label>
+        <input type="text" id="age1" name="age" required>
+        <br><br>
+        <button type="button" class="submitBtn">Enviar</button>
+    </form>
+
+    <form class="myForm">
+        <label for="name2">Nome:</label>
+        <input type="text" id="name2" name="name" required>
+        <br><br>
+        <label for="age2">Idade:</label>
+        <input type="text" id="age2" name="age" required>
+        <br><br>
+        <button type="button" class="submitBtn">Enviar</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.submitBtn').click(function(){
+                var form = $(this).closest('form');  // Pega o formulário mais próximo
+                var name = form.find('input[name="name"]').val();
+                var age = form.find('input[name="age"]').val();
+
+                $.ajax({
+                    url: '/submit',  // Rota do Flask
+                    type: 'POST',
+                    data: {
+                        name: name,
+                        age: age
+                    },
+                    success: function(response){
+                        $('#response').html(response);  // Exibe a resposta do servidor
+                    },
+                    error: function(){
+                        alert('Erro ao enviar os dados');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

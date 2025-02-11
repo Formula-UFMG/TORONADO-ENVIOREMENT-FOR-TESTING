@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Pilots</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .year-section {
+            margin-bottom: 40px;
+        }
+
+        .year-section h2 {
+            color: #333;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 500px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            margin: 5px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Selecionar Piloto</h2>
+        <div class="card-container">
+            {% for prototipo in prototipos %}
+                <button data-id="{{ prototipo.id }}" onclick="enviarRequisicao(this)">{{ prototipo.nome }}</button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container" id="cards-container"></div>
+
+    <!-- Formulário para enviar informações do piloto -->
+    <div class="container">
+        <h2>Formulário de Piloto</h2>
+        <form id="piloto-form" method="post" action="apagar_piloto">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" readonly>
+            <label for="id_piloto">ID</label>
+            <input type="text" id="id_piloto" name="id_piloto" readonly>
+            <label for="temporada">Temporada</label>
+            <input type="text" id="temporada" name="temporada" readonly>
+            <label for="n_testes">Testes</label>
+            <input type="text" id="n_testes" name="n_testes" readonly>
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" readonly>
+            <label for="kms">KMs</label>
+            <input type="text" id="kms" name="kms" readonly>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <script>
+        function enviarRequisicao(botao) {
+            const id = botao.getAttribute("data-id");
+
+            fetch('/pilotos/prototipo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_prototipo: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById("cards-container");
+                container.innerHTML = "";
+
+                data.forEach(piloto => {
+                    const card = document.createElement("div");
+                    card.classList.add("card");
+                    card.innerHTML = `
+                        <h2>${piloto.nome || "Desconhecido"}</h2>
+                        <p>ID: ${piloto.id_piloto}</p>
+                        <p>Temporada: ${piloto.temporada}</p>
+                        <p>Testes: ${piloto.n_testes}</p>
+                        <p>Email: ${piloto.email}</p>
+                        <p>KMs: ${piloto.kms}</p>
+                        <button onclick="preencherFormulario(this)">Selecionar Piloto</button>
+                    `;
+                    card.querySelector("button").pilotoData = piloto; // Armazena os dados do piloto no botão
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+
+        function preencherFormulario(botao) {
+            const piloto = botao.pilotoData; // Acessa os dados armazenados no botão
+
+            document.getElementById("nome").value = piloto.nome || "Desconhecido";
+            document.getElementById("id_piloto").value = piloto.id_piloto;
+            document.getElementById("temporada").value = piloto.temporada;
+            document.getElementById("n_testes").value = piloto.n_testes;
+            document.getElementById("email").value = piloto.email;
+            document.getElementById("kms").value = piloto.kms;
+        }
+    </script>
+</body>
+</html>

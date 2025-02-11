@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrossel Circular</title>
+    <style>
+        /* Estilos gerais */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            flex: 0 0 33.33%; /* Mostra 3 imagens por vez */
+            position: relative;
+            padding: 10px;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px;
+            display: none;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .carousel-item:hover .info-box {
+            display: block; /* Mostra informações ao passar o mouse */
+        }
+
+        .info-box button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .info-box button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Botões de navegação */
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            font-size: 24px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10; /* Garante que os botões fiquem acima das imagens */
+        }
+
+        .carousel-button.left {
+            left: 10px;
+        }
+
+        .carousel-button.right {
+            right: 10px;
+        }
+
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        form {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            width: 400px;
+            margin: 20px auto;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        form input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Carrossel Circular com Navegação</h1>
+
+    <!-- Carrossel -->
+    <div class="carousel-container">
+        <button class="carousel-button left" onclick="moveCarousel(-1)">&#8249;</button>
+        <div class="carousel-track">
+            {% for circuito in circuitos %}
+                <!-- Itens do carrossel -->
+                <div class="carousel-item">
+                    <img src="{{circuito.caminho_exi}}"  onerror="changeImageOnError(this)" alt="Erro ao carregar as imagens do banco">
+                    <div class="info-box">
+                        <p><strong>nome:</strong>{{circuito.nome}}</p>
+                        <p><strong>id_circuito:</strong>{{circuito.id_circuito}}</p>
+                        <p><strong>tempo_descolcamento:</strong> {{circuito.tempo_descolcamento}}</p>
+                        <p><strong>KM:</strong> {{circuito.KM}}</p>
+                        <p><strong>curvas:</strong> {{circuito.curvas}}</p>
+                        <p><strong>n_setores:</strong> {{circuito.n_setores}}</p>
+                        <p><strong>cones:</strong> {{circuito.cones}}</p>
+                        <p><strong>local:</strong> {{circuito.local}}</p>
+                        <button onclick="edita_Forme('{{circuito.id_circuito}}','{{circuito.nome}}','{{circuito.tempo_descolcamento}}','{{circuito.KM}}','{{circuito.curvas}}','{{circuito.cones}}','{{circuito.local}}','{{circuito.n_setores}}')">Editar Dados</button>
+                        <button onclick="apagar_Forme('{{circuito.id_circuito}}','{{circuito.nome}}','{{circuito.tempo_descolcamento}}','{{circuito.KM}}','{{circuito.curvas}}','{{circuito.cones}}','{{circuito.local}}','{{circuito.n_setores}}')">Apagar Dados</button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-button right" onclick="moveCarousel(1)">&#8250;</button>
+    </div>
+
+    <!-- Formulário -->
+    <form method="post" action="cria_circuito" enctype="multipart/form-data">
+        <h2>cria circuito</h2>
+
+        <label for="nome">nome:</label><br>
+        <input type="text" id="nome" name="nome"><br>
+
+        <label for="tempo_descolcamento">tempo_descolcamento:</label><br>
+        <input type="text" id="tempo_descolcamento" name="tempo_descolcamento"><br>
+
+        <label for="KM">KM:</label><br>
+        <input type="text" id="KM" name="KM"><br>
+
+        <label for="curvas">curvas:</label><br>
+        <input type="text" id="curvas" name="curvas"><br>
+
+        <label for="setor">numero de setor:</label><br>
+        <input type="text" id="setor" name="setor"><br>
+
+        <label for="cones">cones:</label><br>
+        <input type="text" id="cones" name="cones"><br>
+
+        <label for="local">local:</label><br>
+        <input type="text" id="local" name="local"><br>
+
+        <label for="n_setores">n_setores:</label><br>
+        <input type="text" id="n_setores" name="n_setores"><br>
+
+        <label for="circuito">imagem</label>
+        <input type="file" name="circuito" id="circuito">
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <form method="post" action="modifica_circuito" enctype="multipart/form-data">
+        <h2>Formulário edição</h2>
+        <label for="id_circuito_editar">id_circuito:</label><br>
+        <input type="text" id="id_circuito_editar" name="id_circuito_editar"><br>
+
+        <label for="nome_editar">nome:</label><br>
+        <input type="text" id="nome_editar" name="nome_editar"><br>
+
+        <label for="tempo_descolcamento_editar">tempo_descolcamento:</label><br>
+        <input type="text" id="tempo_descolcamento_editar" name="tempo_descolcamento_editar"><br>
+
+        <label for="KM_editar">KM:</label><br>
+        <input type="text" id="KM_editar" name="KM_editar"><br>
+
+        <label for="curvas_editar">curvas:</label><br>
+        <input type="text" id="curvas_editar" name="curvas_editar"><br>
+
+        <label for="cones_editar">cones:</label><br>
+        <input type="text" id="cones_editar" name="cones_editar"><br>
+
+        <label for="local_editar">local:</label><br>
+        <input type="text" id="local_editar" name="local_editar"><br>
+
+        <label for="n_setores_editar">n_setores:</label><br>
+        <input type="text" id="n_setores_editar" name="n_setores_editar"><br>
+
+        <label for="circuito_editar">imagem</label>
+        <input type="file" name="circuito_editar" id="circuito_editar">
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <form method="post" action="apaga_circuito" >
+        <h2>Formulário apagar</h2>
+        <label for="id_circuito_apagar">id_circuito:</label><br>
+        <input type="text" id="id_circuito_apagar" name="id_circuito_apagar"><br>
+
+        <label for="nome_apagar">nome:</label><br>
+        <input type="text" id="nome_apagar" name="nome_apagar"><br>
+
+        <label for="tempo_descolcamento_apagar">tempo_descolcamento:</label><br>
+        <input type="text" id="tempo_descolcamento_apagar" name="tempo_descolcamento_apagar"><br>
+
+        <label for="KM_apagar">KM:</label><br>
+        <input type="text" id="KM_apagar" name="KM_apagar"><br>
+
+        <label for="curvas_apagar">curvas:</label><br>
+        <input type="text" id="curvas_apagar" name="curvas_apagar"><br>
+
+        <label for="cones_apagar">cones:</label><br>
+        <input type="text" id="cones_apagar" name="cones_apagar"><br>
+
+        <label for="local_apagar">local:</label><br>
+        <input type="text" id="local_apagar" name="local_apagar"><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script>
+        let currentIndex = 0;
+
+        function moveCarousel(direction) {
+            const track = document.querySelector('.carousel-track');
+            const items = document.querySelectorAll('.carousel-item');
+            const itemWidth = items[0].offsetWidth;
+            const totalItems = items.length;
+
+            // Atualiza o índice com comportamento cíclico
+            currentIndex = (currentIndex + direction + totalItems) % totalItems;
+
+            track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+        }
+
+        function changeImageOnError(imgElement) {
+            imgElement.src = "path/to/your/default/image.jpg"; // Defina o caminho para uma imagem padrão em caso de erro
+        }
+
+        function edita_Forme(id_circuito, nome, tempo_descolcamento, KM, curvas, cones, local, n_setores) {
+            document.getElementById("id_circuito_editar").value = id_circuito;
+            document.getElementById("nome_editar").value = nome;
+            document.getElementById("tempo_descolcamento_editar").value = tempo_descolcamento;
+            document.getElementById("KM_editar").value = KM;
+            document.getElementById("curvas_editar").value = curvas;
+            document.getElementById("cones_editar").value = cones;
+            document.getElementById("local_editar").value = local;
+            document.getElementById("n_setores_editar").value = n_setores;
+        }
+
+        function apagar_Forme(id_circuito, nome, tempo_descolcamento, KM, curvas, cones, local, n_setores) {
+            document.getElementById("id_circuito_apagar").value = id_circuito;
+            document.getElementById("nome_apagar").value = nome;
+            document.getElementById("tempo_descolcamento_apagar").value = tempo_descolcamento;
+            document.getElementById("KM_apagar").value = KM;
+            document.getElementById("curvas_apagar").value = curvas;
+            document.getElementById("cones_apagar").value = cones;
+            document.getElementById("local_apagar").value = local;
+        }
+    </script>
+</body>
+</html>

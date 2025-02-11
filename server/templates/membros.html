@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table, th, td {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        /* Centralizar os formulários */
+        .form-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-container.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Botão de fechar */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close-btn:hover {
+            color: #f00;
+        }
+
+        /* Estilo do formulário */
+        form {
+            width: 100%;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Tabela estilizada */
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Formulários e Botões */
+        .form-container h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="abrirFormularioCadastro()">Cadastrar Membro</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>nome</th>
+                <th>email</th>
+                <th>subgrupo</th>
+                {% if subgrupo == True %}
+                    <th>editar</th>
+                    <th>apagar</th>
+                    <th>setar como piloto</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for membro in membros %}
+                <tr>
+                    <td>{{membro.nome}}</td>
+                    <td>{{membro.email}}</td>
+                    <td>{{membro.subgrupo}}</td>
+                    {% if subgrupo == True %}
+                        <td><button onclick="editar_forme(this)">editar</button></td>
+                        <td><button onclick="apagar_forme(this)">apagar</button></td>
+                        <td><button onclick="piloto_forme(this)">setar piloto</button></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if subgrupo == True %}
+        <div id="formulario_editar" class="form-container">
+            <button class="close-btn" onclick="fecharFormulario('formulario_editar')">×</button>
+            <h3>Formulário de Edição</h3>
+            <form id="editar_Form" action="modifica_conta" method="post">
+                <label for="nome_editar">Nome:</label>
+                <input type="text" id="nome_editar" name="nome_editar"><br><br>
+
+                <label for="email_editar">Email:</label>
+                <input type="email" id="email_editar" name="email_editar"><br><br>
+
+                <label for="subgrupo_editar">Subgrupo:</label>
+                <input type="text" id="subgrupo_editar" name="subgrupo_editar"><br><br>
+
+                <label for="senha_editar">Senha:</label>
+                <input type="password" id="senha_editar" name="senha_editar"><br><br>
+
+                <label for="senha_conf_editar">Confirme a senha:</label>
+                <input type="password" id="senha_conf_editar" name="senha_conf_editar"><br><br>
+
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+    {% endif %}
+
+    {% if subgrupo == True %}
+        <div id="formulario_apagar" class="form-container">
+            <button class="close-btn" onclick="fecharFormulario('formulario_apagar')">×</button>
+            <h3>Formulário para apagar</h3>
+            <form id="apagar_form" action="apagar_membro" method="post">
+                <label for="nome_apagar">Nome:</label>
+                <input type="text" id="nome_apagar" name="nome_apagar" readonly><br><br>
+        
+                <label for="email_apagar">Email:</label>
+                <input type="email" id="email_apagar" name="email_apagar" readonly><br><br>
+        
+                <label for="subgrupo_apagar">Subgrupo:</label>
+                <input type="text" id="subgrupo_apagar" name="subgrupo_apagar" readonly><br><br>
+        
+                <button type="submit">Confirmar Apagar</button>
+            </form>
+        </div>
+    {% endif %}
+
+    {% if subgrupo == True %}
+        <div id="formulario_cadastro" class="form-container">
+            <button class="close-btn" onclick="fecharFormulario('formulario_cadastro')">×</button>
+            <h3>Cadastrar membro</h3>
+            <form id="cadastro_Form" action="cria_membro" method="post">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome"><br><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email"><br><br>
+
+                <label for="subgrupo">Subgrupo:</label>
+                <input type="text" id="subgrupo" name="subgrupo"><br><br>
+
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha"><br><br>
+
+                <label for="senha_conf">Confirme a senha:</label>
+                <input type="password" id="senha_conf" name="senha_conf"><br><br>
+
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    {% endif %}
+
+    {% if subgrupo == True %}
+        <div id="formulario_piloto" class="form-container">
+            <button class="close-btn" onclick="fecharFormulario('formulario_piloto')">×</button>
+            <h3>Definir Membro como Piloto</h3>
+            <form id="piloto_form" action="set_piloto" method="post">
+                <label for="nome_piloto">Nome:</label>
+                <input type="text" id="nome_piloto" name="nome_piloto" readonly><br><br>
+
+                <label for="email_piloto">Email:</label>
+                <input type="email" id="email_piloto" name="email_piloto" readonly><br><br>
+
+                <label for="subgrupo_piloto">Subgrupo:</label>
+                <input type="text" id="subgrupo_piloto" name="subgrupo_piloto" readonly><br><br>
+
+                <button type="submit">Confirmar como Piloto</button>
+            </form>
+        </div>
+    {% endif %}
+
+    <script>
+        let formularioAberto = null;
+
+        function editar_forme(button) {
+            abrirFormulario('formulario_editar', button);
+        }
+
+        function apagar_forme(button) {
+            abrirFormulario('formulario_apagar', button);
+        }
+
+        function piloto_forme(button) {
+            abrirFormulario('formulario_piloto', button);
+        }
+
+        function abrirFormulario(formId, button = null) {
+            // Fechar o formulário atual se houver algum aberto
+            if (formularioAberto && formularioAberto !== formId) {
+                fecharFormulario(formularioAberto);
+            }
+
+            // Preencher os campos do formulário com os dados da linha se o botão for passado
+            if (button) {
+                const row = button.closest('tr');
+                const nome = row.cells[0].innerText;
+                const email = row.cells[1].innerText;
+                const subgrupo = row.cells[2].innerText;
+
+                if (formId === 'formulario_editar') {
+                    document.getElementById("nome_editar").value = nome;
+                    document.getElementById("email_editar").value = email;
+                    document.getElementById("subgrupo_editar").value = subgrupo;
+                } else if (formId === 'formulario_apagar') {
+                    document.getElementById("nome_apagar").value = nome;
+                    document.getElementById("email_apagar").value = email;
+                    document.getElementById("subgrupo_apagar").value = subgrupo;
+                } else if (formId === 'formulario_piloto') {
+                    document.getElementById("nome_piloto").value = nome;
+                    document.getElementById("email_piloto").value = email;
+                    document.getElementById("subgrupo_piloto").value = subgrupo;
+                }
+            }
+
+            // Mostrar o formulário
+            document.getElementById(formId).classList.add("show");
+            formularioAberto = formId;
+        }
+
+        function abrirFormularioCadastro() {
+            abrirFormulario('formulario_cadastro');
+        }
+
+        function fecharFormulario(formId) {
+            document.getElementById(formId).classList.remove("show");
+            formularioAberto = null;
+        }
+    </script>
+
+</body>
+</html>
